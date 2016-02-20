@@ -1,12 +1,12 @@
 from time import sleep
-from motor import motor
+from motor import Motor
 import atexit
 
 motors = None
 
 
 def main_loop():
-    motors = [motor(40), motor(36), motor(32), motor(26)]
+    motors = [Motor(40), Motor(36), Motor(32), Motor(26)]
 
     run = True
     try:
@@ -25,7 +25,15 @@ def main_loop():
 
 @atexit.register
 def shutdown():
+    '''Shuting down
+    '''
     print('die')
+    for m in motors:
+        if m:
+            m.shutdown()
 
 if __name__ == '__main__':
-    main_loop()
+    try:
+        main_loop()
+    except KeyboardInterrupt:
+        print('Shuting down from manual interupt')
