@@ -54,6 +54,7 @@ def main_loop():
     finally:
         for m in motors:
             m.shutdown()
+        sensor.stop()
         print('bye')
 
 
