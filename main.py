@@ -43,14 +43,14 @@ def main_loop():
             # print('Accelerometer', accelerometer_data)
             # print('Rotation', rotation)
 
-            if i == 1000:
-                end = time.time()
-                seconds = end-start
-                print(seconds)
-                print('iterations', 1000/seconds)
+            # if i == 1000:
+                # end = time.time()
+                # seconds = end-start
+                # print(seconds)
+                # print('iterations', 1000/seconds)
 
-                i = 0
-                start = end
+                # i = 0
+                # start = end
     finally:
         for m in motors:
             m.shutdown()
