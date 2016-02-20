@@ -26,7 +26,6 @@ class MPU6050:
         val = (high << 8) + low
         return val
 
-    @staticmethod
     def read_word_2c(self, adr):
         val = self.read_word(adr)
         if (val >= 0x8000):
@@ -40,12 +39,12 @@ class MPU6050:
 
     @staticmethod
     def get_y_rotation(x,y,z):
-        radians = math.atan2(x, MP6050.dist(y,z))
+        radians = math.atan2(x, MPU6050.dist(y,z))
         return -math.degrees(radians)
 
     @staticmethod
     def get_x_rotation(x,y,z):
-        radians = math.atan2(y, MP6050.dist(x,z))
+        radians = math.atan2(y, MPU6050.dist(x,z))
         return math.degrees(radians)
 
     @staticmethod
