@@ -13,7 +13,7 @@ def main_loop():
 
     run = True
     i = 0
-    start = time.time
+    start = time.time()
     try:
         while run is True:
 
@@ -32,8 +32,8 @@ def main_loop():
             # print('Accelerometer', accelerometer_data)
             # print('Rotation', rotation)
 
-            if i == 10000:
-                end = time.time
+            if i == 1000:
+                end = time.time()
                 seconds = end-start
 
                 print('iterations', 10000/seconds)
