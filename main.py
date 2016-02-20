@@ -21,13 +21,13 @@ def main_loop():
                 m.duty_cycle = m.duty_cycle+200
                 print(m.duty_cycle)
 
-            gyro_data = mpu6050.get_gyro_scaled()
+            gyro_data = mpu6050.get_gyro()
             accelerometer_data = mpu6050.get_accelerometer_scaled()
             rotation = mpu6050.get_rotation()
 
-            print(gyro_data)
-            print(accelerometer_data)
-            print(rotation)
+            print('Gyro', gyro_data)
+            print('Accelerometer', accelerometer_data)
+            print('Rotation', rotation)
     finally:
         for m in motors:
             m.shutdown()
