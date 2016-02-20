@@ -2,7 +2,7 @@ import smbus
 import math
 import time
 
-class MP6050:
+class MPU6050:
 
     def __init__(self, address=0x68):
         # Power management registers
