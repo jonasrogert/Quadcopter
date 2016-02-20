@@ -16,6 +16,8 @@ class MPU6050:
         # Now wake the 6050 up as it starts in sleep mode
         self.bus.write_byte_data(self.address, self.power_mgmt_1, 0)
 
+    def calibrate(self):
+
 
     def read_byte(self, adr):
         return self.bus.read_byte_data(self.address, adr)
