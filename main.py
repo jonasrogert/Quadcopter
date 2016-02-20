@@ -5,7 +5,7 @@ from sensors.sensor import sensor
 
 
 motors = None
-sensor = sensor(imulog=True)
+sensor = sensor()
 
 def main_loop():
     # motors = [motor(40), motor(36), motor(32), motor(26)]
@@ -26,6 +26,9 @@ def main_loop():
                 print(m.duty_cycle)
 
 
+            print(sensor.roll, sensor.pitch, sensor.yaw)
+            print(sensor.x_acc, sensor.y_acc, sensor.z_acc)
+            print(sensor.r_rate, sensor.p_rate, sensor.y_rate)
             # print('Gyro', gyro_data)
             # print('Accelerometer', accelerometer_data)
             # print('Rotation', rotation)
