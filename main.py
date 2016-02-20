@@ -19,7 +19,7 @@ def main_loop():
             sleep(1)
             for m in motors:
                 m.duty_cycle = m.duty_cycle+200
-            print(motors[1].duty_cycle)
+                print(m.duty_cycle)
 
             gyro_data = mpu6050.get_gyro_scaled()
             accelerometer_data = mpu6050.get_accelerometer_scaled()
