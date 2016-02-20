@@ -47,7 +47,6 @@ class MPU6050:
         radians = math.atan2(y, MPU6050.dist(x,z))
         return math.degrees(radians)
 
-    @staticmethod
     def get_gyro(self):
         return [self.read_word_2c(0x43), self.read_word_2c(0x45), self.read_word_2c(0x47)]
 
