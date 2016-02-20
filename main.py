@@ -10,7 +10,7 @@ sensor = sensor()
 def main_loop():
     # motors = [motor(40), motor(36), motor(32), motor(26)]
     motors = []
-    sensor.run()
+    sensor.start()
 
     run = True
     i = 0
