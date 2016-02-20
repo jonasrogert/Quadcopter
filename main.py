@@ -35,8 +35,8 @@ def main_loop():
             if i == 1000:
                 end = time.time()
                 seconds = end-start
-
-                print('iterations', 10000/seconds)
+                print(seconds)
+                print('iterations', 1000/seconds)
 
                 i = 0
                 start = end
