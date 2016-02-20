@@ -36,6 +36,7 @@ def main_loop():
                 print(m.duty_cycle)
 
 
+            logging.debug(sensor.getDataString())
             # print(sensor.roll, sensor.pitch, sensor.yaw)
             # print(sensor.x_acc, sensor.y_acc, sensor.z_acc)
             # print(sensor.r_rate, sensor.p_rate, sensor.y_rate)
