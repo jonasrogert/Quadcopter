@@ -131,7 +131,7 @@ class sensor(threading.Thread):
 
             if self.imulog is True:
                 self.datalog += self.getDataString(stepTime, level=0)
-                self.logger.debug(self.getDataString(stepTime)
+                self.logger.debug(self.getDataString(stepTime))
 
             #used for performance test only
             doPerf = False
