@@ -1,4 +1,4 @@
-from time import sleep
+import time
 from motor import Motor
 import atexit
 from sensors.mpu6050 import MPU6050
@@ -12,11 +12,14 @@ def main_loop():
     motors = []
 
     run = True
+    i = 0
+    start = time.time
     try:
         while run is True:
+
+            i += 1
             # check sensors
             # controls motors
-            sleep(1)
             for m in motors:
                 m.duty_cycle = m.duty_cycle+200
                 print(m.duty_cycle)
@@ -25,9 +28,18 @@ def main_loop():
             accelerometer_data = mpu6050.get_accelerometer_scaled()
             rotation = mpu6050.get_rotation()
 
-            print('Gyro', gyro_data)
-            print('Accelerometer', accelerometer_data)
-            print('Rotation', rotation)
+            # print('Gyro', gyro_data)
+            # print('Accelerometer', accelerometer_data)
+            # print('Rotation', rotation)
+
+            if i == 10000:
+                end = time.time
+                seconds = end-start
+
+                print('iterations', 10000/seconds)
+
+                i = 0
+                start = end
     finally:
         for m in motors:
             m.shutdown()
