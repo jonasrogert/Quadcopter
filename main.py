@@ -1,15 +1,16 @@
 import time
 from motor import Motor
 import atexit
-from sensors.MPU6050 import MPU6050
+from sensors.sensor import sensor
 
 
 motors = None
-mpu6050 = MPU6050()
+sensor = sensor()
 
 def main_loop():
     # motors = [motor(40), motor(36), motor(32), motor(26)]
     motors = []
+    sensor.run()
 
     run = True
     i = 0
@@ -24,8 +25,6 @@ def main_loop():
                 m.duty_cycle = m.duty_cycle+200
                 print(m.duty_cycle)
 
-
-            print(mpu6050.readSensors())
 
             # print('Gyro', gyro_data)
             # print('Accelerometer', accelerometer_data)
