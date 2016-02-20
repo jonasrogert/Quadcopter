@@ -2,10 +2,20 @@ import time
 from motor import Motor
 import atexit
 from sensors.sensor import sensor
+import logging
+import sys
 
+root = logging.getLogger()
+root.setLevel(logging.DEBUG)
+
+ch = logging.StreamHandler(sys.stdout)
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+root.addHandler(ch)
 
 motors = None
-sensor = sensor()
+sensor = sensor(imulog=True)
 
 def main_loop():
     # motors = [motor(40), motor(36), motor(32), motor(26)]
@@ -26,9 +36,9 @@ def main_loop():
                 print(m.duty_cycle)
 
 
-            print(sensor.roll, sensor.pitch, sensor.yaw)
-            print(sensor.x_acc, sensor.y_acc, sensor.z_acc)
-            print(sensor.r_rate, sensor.p_rate, sensor.y_rate)
+            # print(sensor.roll, sensor.pitch, sensor.yaw)
+            # print(sensor.x_acc, sensor.y_acc, sensor.z_acc)
+            # print(sensor.r_rate, sensor.p_rate, sensor.y_rate)
             # print('Gyro', gyro_data)
             # print('Accelerometer', accelerometer_data)
             # print('Rotation', rotation)
