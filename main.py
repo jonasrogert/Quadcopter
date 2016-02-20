@@ -5,7 +5,7 @@ from sensors.sensor import sensor
 
 
 motors = None
-sensor = sensor()
+sensor = sensor(imulog=True)
 
 def main_loop():
     # motors = [motor(40), motor(36), motor(32), motor(26)]
