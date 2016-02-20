@@ -7,12 +7,8 @@ motors = None
 mpu6050 = MPU6050()
 
 def main_loop():
-<<<<<<< HEAD
-    motors = [Motor(40), Motor(36), Motor(32), Motor(26)]
-=======
     # motors = [motor(40), motor(36), motor(32), motor(26)]
     motors = []
->>>>>>> 8bd35e52fd9a5900c62af323328ecdf5459cd064
 
     run = True
     try:
