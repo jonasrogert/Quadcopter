@@ -4,15 +4,17 @@ import time
 
 class MP6050:
 
-    # Power management registers
-    power_mgmt_1 = 0x6b
-    power_mgmt_2 = 0x6c
+    def __init__(self, address=0x68):
+        # Power management registers
+        self.power_mgmt_1 = 0x6b
+        self.power_mgmt_2 = 0x6c
 
-    bus = smbus.SMBus(1) # or bus = smbus.SMBus(1) for Revision 2 boards
-    address = 0x68       # This is the address value read via the i2cdetect command
+        self.bus = smbus.SMBus(1) # or bus = smbus.SMBus(1) for Revision 2 boards
+        # self.address = 0x68       # This is the address value read via the i2cdetect command
+        self.address = address
 
-    # Now wake the 6050 up as it starts in sleep mode
-    bus.write_byte_data(address, power_mgmt_1, 0)
+        # Now wake the 6050 up as it starts in sleep mode
+        self.bus.write_byte_data(self.address, self.power_mgmt_1, 0)
 
 
     def read_byte(self, adr):
