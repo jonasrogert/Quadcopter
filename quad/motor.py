@@ -4,6 +4,8 @@ import threading
 import RPi.GPIO as GPIO
 from MPU6050 import axis_dmp
 
+global cycling, global_dc, dc_stepping
+
 dc = 5
 global_dc = 0
 dc_stepping = 0.05
