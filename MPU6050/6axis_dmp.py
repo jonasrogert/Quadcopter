@@ -15,7 +15,7 @@ packetSize = mpu.dmpGetFIFOPacketSize()
 
 term = Terminal()
 
-with term.fullscreen(), term.position():
+with term.fullscreen():
     while True:
         # Get INT_STATUS byte
         mpuIntStatus = mpu.getIntStatus()
@@ -41,11 +41,9 @@ with term.fullscreen(), term.position():
             g = mpu.dmpGetGravity(q)
             ypr = mpu.dmpGetYawPitchRoll(q, g)
 
-            with term.position(0,1):
+            with term.location(0, 0)
                 print(ypr['yaw'] * 180 / math.pi),
-            with term.position(0,2):
                 print(ypr['pitch'] * 180 / math.pi),
-            with term.position(0,3):
                 print(ypr['roll'] * 180 / math.pi)
 
             # track FIFO count here in case there is > 1 packet available
