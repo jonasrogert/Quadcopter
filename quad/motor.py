@@ -155,9 +155,11 @@ def main_loop():
                     with term.location(x,y):
                         print(dc)
 
-                if simulation:
-                    with term.location(0, 12):
-                        print(global_dc)
+            if simulation:
+                with term.location(0, 12):
+                    print(global_dc)
+                with term.location(0, 14):
+                    print(sensor_values)
     finally:
         # shut down cleanly
         if not simulation:
