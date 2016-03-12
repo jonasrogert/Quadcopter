@@ -15,7 +15,7 @@ ch.setFormatter(formatter)
 root.addHandler(ch)
 
 motors = None
-sensor = sensor(imulog=True)
+sensor = sensor()
 
 def main_loop():
     # motors = [motor(40), motor(36), motor(32), motor(26)]
@@ -36,24 +36,25 @@ def main_loop():
                 print(m.duty_cycle)
 
 
-            # print(sensor.roll, sensor.pitch, sensor.yaw)
+            print(sensor.roll, sensor.pitch, sensor.yaw)
             # print(sensor.x_acc, sensor.y_acc, sensor.z_acc)
             # print(sensor.r_rate, sensor.p_rate, sensor.y_rate)
             # print('Gyro', gyro_data)
             # print('Accelerometer', accelerometer_data)
             # print('Rotation', rotation)
 
-            if i == 1000:
-                end = time.time()
-                seconds = end-start
-                print(seconds)
-                print('iterations', 1000/seconds)
+            # if i == 1000:
+                # end = time.time()
+                # seconds = end-start
+                # print(seconds)
+                # print('iterations', 1000/seconds)
 
-                i = 0
-                start = end
+                # i = 0
+                # start = end
     finally:
         for m in motors:
-            m.shutdown()
+            if m:
+                m.shutdown()
         sensor.stop()
         print('bye')
 
