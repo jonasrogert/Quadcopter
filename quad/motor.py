@@ -134,7 +134,7 @@ def main_loop():
     it.start()
 
     if simulation:
-        term.clear()
+        print(term.clear())
     try:
         while cycling:
             # read sensor values
