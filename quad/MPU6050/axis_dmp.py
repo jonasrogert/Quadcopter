@@ -45,9 +45,10 @@ def sensor_worker():
             result = mpu.getFIFOBytes(packetSize)
             q = mpu.dmpGetQuaternion(result)
             g = mpu.dmpGetGravity(q)
-            ypr = mpu.dmpGetYawPitchRoll(q, g)
+            sensor_value = mpu.dmpGetYawPitchRoll(q, g)
 
-            sensor_value = {k: value*180/math.pi for k, value in ypr.items()}
+            # sensor_value = {k: value*180/math.pi for k, value in ypr.items()}
+            # sensor_value = ypr
 
             # track FIFO count here in case there is > 1 packet available
             # (this lets us immediately read more without waiting for an interrupt)

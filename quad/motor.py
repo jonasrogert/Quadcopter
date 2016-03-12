@@ -2,6 +2,7 @@ import time
 import threading
 
 import RPi.GPIO as GPIO
+import math
 from MPU6050 import axis_dmp
 
 global cycling, global_dc, dc_stepping
@@ -42,7 +43,8 @@ class InputThread(threading.Thread):
 
 
 def read_sensor_values():
-    return axis_dmp.sensor_value
+    sensor_value = {k: value*180/math.pi for k, value in axis_dmp.sensor_value.items()}
+    return sensor_value
 
 
 def calculate_dc_for_motor(motor, global_dc, sensor_values):
