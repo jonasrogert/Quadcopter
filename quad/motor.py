@@ -8,6 +8,7 @@ dc = 5
 global_dc = 0
 dc_stepping = 0.05
 simulation = True
+cycling = True
 
 if simulation:
     import blessed
@@ -17,7 +18,7 @@ if simulation:
 
 class InputThread(threading.Thread):
 
-    global global_dc, dc_stepping
+    global global_dc, dc_stepping, cycling
 
     def __init__(self):
         self.running = True
@@ -126,8 +127,6 @@ def main_loop():
     res = raw_input()
 
     print ('increase > a | decrease > z | save Wh > n | set Wh > h|quit > 9')
-
-    cycling = True
 
     try:
         while cycling:

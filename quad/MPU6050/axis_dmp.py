@@ -1,7 +1,7 @@
 import math
 import threading
 
-import mpu6050
+from MPU6050 import mpu6050
 
 global sensor_value
 
