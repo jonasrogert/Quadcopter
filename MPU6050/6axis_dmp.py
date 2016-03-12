@@ -1,21 +1,27 @@
-import time
 import math
 import mpu6050
+import threading
 
-from blessed import Terminal
+
+global sensor_value
 
 
-# Sensor initialization
-mpu = mpu6050.MPU6050()
-mpu.dmpInitialize()
-mpu.setDMPEnabled(True)
+def start_worker():
+    t = threading.Thread(target=sensor_worker)
+    t.start()
 
-# get expected DMP packet size for later comparison
-packetSize = mpu.dmpGetFIFOPacketSize()
 
-term = Terminal()
+def sensor_worker():
+    # global sensor values dict
+    global sensor_value
+    # Sensor initialization
+    mpu = mpu6050.MPU6050()
+    mpu.dmpInitialize()
+    mpu.setDMPEnabled(True)
 
-with term.fullscreen():
+    # get expected DMP packet size for later comparison
+    packetSize = mpu.dmpGetFIFOPacketSize()
+
     while True:
         # Get INT_STATUS byte
         mpuIntStatus = mpu.getIntStatus()
@@ -41,10 +47,9 @@ with term.fullscreen():
             g = mpu.dmpGetGravity(q)
             ypr = mpu.dmpGetYawPitchRoll(q, g)
 
-            with term.location(0, 0):
-                print(ypr['yaw'] * 180 / math.pi),
-                print(ypr['pitch'] * 180 / math.pi),
-                print(ypr['roll'] * 180 / math.pi)
+            ypr.update((x, y*180/math.pi) for x, y in ypr.items())
+
+            sensor_value = ypr
 
             # track FIFO count here in case there is > 1 packet available
             # (this lets us immediately read more without waiting for an interrupt)
