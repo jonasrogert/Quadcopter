@@ -1,6 +1,7 @@
-import RPi.GPIO as GPIO
 import time
 import threading
+
+import RPi.GPIO as GPIO
 from MPU6050 import axis_dmp
 
 dc = 5
