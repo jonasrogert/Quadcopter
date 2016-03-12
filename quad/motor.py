@@ -116,10 +116,6 @@ def main_loop():
     time.sleep(5)
     print('Sensor thread started')
 
-    print('Starting input thread')
-    it = InputThread()
-    it.start()
-
     if not simulation:
         for s in servos:
             s.start(1)
@@ -130,6 +126,10 @@ def main_loop():
     res = input()
 
     print ('increase > a | decrease > z | save Wh > n | set Wh > h|quit > 9')
+
+    print('Starting input thread')
+    it = InputThread()
+    it.start()
 
     try:
         while cycling:
