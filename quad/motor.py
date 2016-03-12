@@ -27,14 +27,14 @@ class InputThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        while cycling:
+        while self.cycling:
             res = raw_input()
             if res == 'a':
-                global_dc += dc_stepping
+                self.global_dc += self.dc_stepping
             if res == 'z':
-                global_dc -= dc_stepping
+                self.global_dc -= self.dc_stepping
             if res == '9':
-                cycling = False
+                self.cycling = False
 
     def stop(self):
         self.running = False
