@@ -20,21 +20,22 @@ if simulation:
 
 class InputThread(threading.Thread):
 
-    global global_dc, dc_stepping, cycling
-
     def __init__(self):
         self.running = True
         threading.Thread.__init__(self)
 
     def run(self):
-        while self.cycling:
+
+        global global_dc, dc_stepping, cycling
+
+        while cycling:
             res = raw_input()
             if res == 'a':
-                self.global_dc += self.dc_stepping
+                global_dc += dc_stepping
             if res == 'z':
-                self.global_dc -= self.dc_stepping
+                global_dc -= dc_stepping
             if res == '9':
-                self.cycling = False
+                cycling = False
 
     def stop(self):
         self.running = False
