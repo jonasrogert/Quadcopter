@@ -41,7 +41,7 @@ with term.fullscreen():
             g = mpu.dmpGetGravity(q)
             ypr = mpu.dmpGetYawPitchRoll(q, g)
 
-            with term.location(0, 0)
+            with term.location(0, 0):
                 print(ypr['yaw'] * 180 / math.pi),
                 print(ypr['pitch'] * 180 / math.pi),
                 print(ypr['roll'] * 180 / math.pi)
