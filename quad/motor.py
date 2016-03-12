@@ -102,7 +102,7 @@ def main_loop():
             GPIO.PWM(26, 50)
         ]
     else:
-        servos = range(4)
+        servos = list(range(4))
 
     # TODO make sure motors are connected in the right order
 
@@ -137,7 +137,7 @@ def main_loop():
         while cycling:
             # read sensor values
             sensor_values = read_sensor_values()
-            for motor_index, s in servos.items():
+            for motor_index, s in enumerate(servos):
                 # calculate each motors value independently
                 dc = calculate_dc_for_motor(motor_index, global_dc, sensor_values)
 
