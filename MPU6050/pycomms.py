@@ -14,7 +14,7 @@ pass
 # ===========================================================================
 
 class PyComms:
-    def __init__(self, address, bus = smbus.SMBus(0)):
+    def __init__(self, address, bus = smbus.SMBus(1)):
         self.address = address
         self.bus = bus
 
