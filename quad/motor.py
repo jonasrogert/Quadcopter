@@ -148,12 +148,16 @@ def main_loop():
                 else:
                     if motor_index in (0,1):
                         y = 0
-                        x = motor_index * 10
+                        x = motor_index * 30
                     else:
                         y = 10
-                        x = (motor_index - 2) * 10
+                        x = (motor_index - 2) * 30
                     with term.location(x,y):
                         print(dc)
+
+                if simulation:
+                    with term.location(0, term.height()-1):
+                        print(global_dc)
     finally:
         # shut down cleanly
         if not simulation:
