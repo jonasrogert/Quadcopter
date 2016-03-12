@@ -1,5 +1,6 @@
 import time
 import threading
+import sys
 
 import RPi.GPIO as GPIO
 import math
@@ -186,4 +187,6 @@ def main_loop():
 
 
 if __name__ == "__main__":
+    if 'live' == sys.argv[1]:
+        simulation = False
     main_loop()
