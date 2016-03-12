@@ -41,4 +41,4 @@ while True:
 
         # track FIFO count here in case there is > 1 packet available
         # (this lets us immediately read more without waiting for an interrupt)
-        fifoCount -= packetSize  
+        fifoCount -= packetSize
