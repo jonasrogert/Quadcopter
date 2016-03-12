@@ -133,6 +133,8 @@ def main_loop():
     it = InputThread()
     it.start()
 
+    if simulation:
+        term.clear()
     try:
         while cycling:
             # read sensor values
