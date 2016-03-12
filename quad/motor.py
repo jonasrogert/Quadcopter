@@ -156,7 +156,7 @@ def main_loop():
                         print(dc)
 
                 if simulation:
-                    with term.location(0, term.height-1):
+                    with term.location(0, 12):
                         print(global_dc)
     finally:
         # shut down cleanly
