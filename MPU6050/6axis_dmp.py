@@ -2,6 +2,9 @@ import time
 import math
 import mpu6050
 
+from blessed import Terminal
+
+
 # Sensor initialization
 mpu = mpu6050.MPU6050()
 mpu.dmpInitialize()
@@ -10,6 +13,9 @@ mpu.setDMPEnabled(True)
 # get expected DMP packet size for later comparison
 packetSize = mpu.dmpGetFIFOPacketSize()
 
+term = Terminal()
+
+with term.fullscreen, term.position:
 while True:
     # Get INT_STATUS byte
     mpuIntStatus = mpu.getIntStatus()
@@ -35,8 +41,11 @@ while True:
         g = mpu.dmpGetGravity(q)
         ypr = mpu.dmpGetYawPitchRoll(q, g)
 
+        term.position(0,1)
         print(ypr['yaw'] * 180 / math.pi),
+        term.position(0,2)
         print(ypr['pitch'] * 180 / math.pi),
+        term.position(0,3)
         print(ypr['roll'] * 180 / math.pi)
 
         # track FIFO count here in case there is > 1 packet available
