@@ -29,7 +29,7 @@ class InputThread(threading.Thread):
         global global_dc, dc_stepping, cycling
 
         while cycling:
-            res = raw_input()
+            res = input()
             if res == 'a':
                 global_dc += dc_stepping
             if res == 'z':
@@ -127,7 +127,7 @@ def main_loop():
             print('Starting motor')
 
     print('***Connect Battery & Press ENTER to start')
-    res = raw_input()
+    res = input()
 
     print ('increase > a | decrease > z | save Wh > n | set Wh > h|quit > 9')
 
@@ -163,7 +163,7 @@ def main_loop():
         print (global_dc)
 
     print('***Press ENTER to quit')
-    res = raw_input()
+    res = input()
 
     if not simulation:
         for s in servos:
