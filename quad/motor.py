@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import threading
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(40, GPIO.OUT)
@@ -91,14 +92,6 @@ def calculate_dc_for_motor(motor, global_dc, sensor_values):
 
 try:
     while cycling:
-        # res = raw_input()
-        # if res == 'a':
-        #     global_dc += stepping
-        # if res == 'z':
-        #     global_dc -= stepping
-        # if res == '9':
-        #     cycling = False
-
         # TODO read sensor values
         sensor_values = read_sensor_values()
         for motor_index, s in servos.items():
@@ -110,6 +103,8 @@ finally:
     for s in servos:
         s.stop()
 
+    # TODO stop input thread
+
     print ("dc var setting is: ")
     print (global_dc)
 
@@ -118,3 +113,24 @@ res = raw_input()
 for s in servos:
     s.stop()
 GPIO.cleanup()
+
+
+class InputThread(threading.Thread):
+
+    global global_dc, dc_stepping
+    def __init__(self):
+        self.running = True
+        threading.Thread.__init__(self)
+
+    def run(self):
+        while cycling:
+            res = raw_input()
+            if res == 'a':
+                global_dc += dc_stepping
+            if res == 'z':
+                global_dc -= dc_stepping
+            if res == '9':
+                cycling = False
+
+    def stop(self):
+        self.running = False
