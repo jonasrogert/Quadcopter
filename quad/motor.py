@@ -103,8 +103,8 @@ def calculate_dc_for_motor(motor, global_dc, sensor_values):
 
     new_dc = global_dc + adjustment
 
-    if new_dc > 100:
-        new_dc = 100
+    if new_dc > 12:
+        new_dc = 12
     elif new_dc < 0:
         new_dc = 0
 
