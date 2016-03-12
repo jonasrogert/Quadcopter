@@ -9,7 +9,7 @@ global cycling, global_dc, dc_stepping
 
 dc = 5
 global_dc = 0
-dc_stepping = 0.05
+dc_stepping = 0.25
 simulation = True
 cycling = True
 
