@@ -3,11 +3,15 @@ import time
 import threading
 from MPU6050 import axis_dmp
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(40, GPIO.OUT)
-GPIO.setup(36, GPIO.OUT)
-GPIO.setup(32, GPIO.OUT)
-GPIO.setup(26, GPIO.OUT)
+dc = 5
+global_dc = 0
+dc_stepping = 0.05
+simulation = True
+
+if simulation:
+    import blessed
+    term = blessed.Terminal()
+    term.enter_fullscreen()
 
 
 class InputThread(threading.Thread):
@@ -77,26 +81,30 @@ def calculate_dc_for_motor(motor, global_dc, sensor_values):
     return new_dc
 
 
-dc = 5
-global_dc = 0
-dc_stepping = 0.05
-
-
 def main_loop():
 
+    if not simulation:
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(40, GPIO.OUT)
+        GPIO.setup(36, GPIO.OUT)
+        GPIO.setup(32, GPIO.OUT)
+        GPIO.setup(26, GPIO.OUT)
+
+        servos = [
+            GPIO.PWM(40, 50),
+            GPIO.PWM(36, 50),
+            GPIO.PWM(32, 50),
+            GPIO.PWM(26, 50)
+        ]
+
     # TODO make sure motors are connected in the right order
-    
+
     '''
     Motor mapping:
     01  (north)
     23  (south)
     '''
-    servos = [
-        GPIO.PWM(40, 50),
-        GPIO.PWM(36, 50),
-        GPIO.PWM(32, 50),
-        GPIO.PWM(26, 50)
-    ]
+
 
     print('Starting sensor thread, sleeping for stabilizing')
     axis_dmp.start_worker()
@@ -107,10 +115,11 @@ def main_loop():
     it = InputThread()
     it.start()
 
-    for s in servos:
-        s.start(1)
-        time.sleep(1)
-        print('Starting motor')
+    if not simulation:
+        for s in servos:
+            s.start(1)
+            time.sleep(1)
+            print('Starting motor')
 
     print('***Connect Battery & Press ENTER to start')
     res = raw_input()
@@ -126,11 +135,23 @@ def main_loop():
             for motor_index, s in servos.items():
                 # calculate each motors value independently
                 dc = calculate_dc_for_motor(motor_index, global_dc, sensor_values)
-                s.ChangeDutyCycle(dc)
+
+                if not simulation:
+                    s.ChangeDutyCycle(dc)
+                else:
+                    if motor_index in (0,1):
+                        y = 0
+                        x = motor_index * 10
+                    else:
+                        y = 10
+                        x = (motor_index - 2) * 10
+                    with term.location(x,y):
+                        print(dc)
     finally:
         # shut down cleanly
-        for s in servos:
-            s.stop()
+        if not simulation:
+            for s in servos:
+                s.stop()
 
         # stop input thread
         it.stop()
@@ -140,9 +161,13 @@ def main_loop():
 
     print('***Press ENTER to quit')
     res = raw_input()
-    for s in servos:
-        s.stop()
-    GPIO.cleanup()
+
+    if not simulation:
+        for s in servos:
+            s.stop()
+        GPIO.cleanup()
+    else:
+        term.exit_fullscreen()
 
 
 if __name__ == "__main__":
