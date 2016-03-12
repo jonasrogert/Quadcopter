@@ -101,6 +101,8 @@ def main_loop():
             GPIO.PWM(32, 50),
             GPIO.PWM(26, 50)
         ]
+    else:
+        servos = range(4)
 
     # TODO make sure motors are connected in the right order
 
