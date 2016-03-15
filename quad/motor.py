@@ -2,9 +2,17 @@ import time
 import threading
 import sys
 
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except Exception as e:
+    pass
+
 import math
-from MPU6050 import axis_dmp
+
+try:
+    from MPU6050 import axis_dmp
+except Exception as e:
+    pass
 
 global cycling, global_dc, dc_stepping
 

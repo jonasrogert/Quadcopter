@@ -7,6 +7,12 @@
 import sys, math, pygame
 from operator import itemgetter
 
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from quad.motor import calculate_dc_for_motor
+
+
 class Point3D:
     def __init__(self, x = 0, y = 0, z = 0):
         self.x, self.y, self.z = float(x), float(y), float(z)
@@ -67,22 +73,33 @@ class Simulation:
             Point3D(-5,-1,0),
             Point3D(-5,1,0),
             Point3D(-1,1,0),
-
+            Point3D(-20, -20, 5),
+            Point3D(-20, 20, 5),
+            Point3D(20, 20, 5),
+            Point3D(20, -20, 5),
         ]
 
         # Define the vertices that compose each of the 6 faces. These numbers are
         # indices to the vertices list defined above.
-        self.faces  = [(0,1,2,11),(2,3,4,5),(5,6,7,8),(8,9,10,11),(11,2,5,8)]
+        self.faces  = [(0,1,2,11),(2,3,4,5),(8,9,10,11),(5,6,7,8),(11,2,5,8),(12,13,14,15)]
 
         # Define colors for each face
-        self.colors = [(255,0,255),(255,0,0),(0,255,0),(0,0,255),(0,255,255)]
+        self.colors = [(0, 0, 255), (0, 0, 255), (0, 0, 255), (0, 0, 255),
+                       (0, 255, 255), (0, 100, 0)]
+
 
         # self.angle = 0
-        self.angle_x = 45
+        self.angle_x = 0
         self.angle_y = 0
         self.angle_z = 0
 
+        self.projection_angle_x = 45
+        self.projection_angle_y = 0
+        self.projection_angle_z = 0
+
     def run(self):
+        iter = 0
+        dc = [0, 0, 0, 0]
         """ Main Loop """
         while 1:
             for event in pygame.event.get():
@@ -91,16 +108,50 @@ class Simulation:
                     sys.exit()
 
             self.clock.tick(50)
-            self.screen.fill((0,32,0))
+            self.screen.fill((0, 32, 0))
+
+            rad_x = iter * math.pi / 180
+            rad_y = rad_x + 180
+            scale_x = math.sin(rad_x)/5
+            # print(scale_x)
+            scale_y = math.sin(rad_y)/5
+            # print(scale_y)
+            deg_x = scale_x
+            deg_y = scale_y
+
+            # self.angle += 1
+            self.angle_x = deg_x
+            self.angle_y = deg_y
+            # self.angle_z += 1
+
+            sensor_values = {
+                'yaw': 0,
+                'pitch': self.angle_y,
+                'roll': self.angle_x,
+            }
+
+            for m in range(4):
+                dc[m] = calculate_dc_for_motor(m, 1, sensor_values)
+                self.colors[m] = (0, 0, 100*dc[m])
+            # print(dc)
 
             # It will hold transformed vertices.
             t = []
             
-            for v in self.vertices:
+            for k, v in enumerate(self.vertices[:-4]):
+                # Rotate the drone
                 # Rotate the point around X axis, then around Y axis, and finally around Z axis.
-                r = v.rotateX(self.angle_x).rotateY(self.angle_y).rotateZ(self.angle_z)
+                self.vertices[k] = v.rotateX(self.angle_x).rotateY(self.angle_y).rotateZ(self.angle_z)
                 # Transform the point from 3D to 2D
-                p = r.project(self.screen.get_width(), self.screen.get_height(), 256, 10)
+                # v = r.project(self.screen.get_width(), self.screen.get_height(), 256, 12)
+                # Put the point in the list of transformed vertices
+                # t.append(p)
+
+            for v in self.vertices:
+                # Projection
+                r = v.rotateX(self.projection_angle_x).rotateY(self.projection_angle_y).rotateZ(self.projection_angle_z)
+                # Transform the point from 3D to 2D
+                p = r.project(self.screen.get_width(), self.screen.get_height(), 256, 12)
                 # Put the point in the list of transformed vertices
                 t.append(p)
 
@@ -121,12 +172,13 @@ class Simulation:
                              (t[f[1]].x, t[f[1]].y), (t[f[2]].x, t[f[2]].y),
                              (t[f[2]].x, t[f[2]].y), (t[f[3]].x, t[f[3]].y),
                              (t[f[3]].x, t[f[3]].y), (t[f[0]].x, t[f[0]].y)]
-                pygame.draw.polygon(self.screen,self.colors[face_index],pointlist)
-
-                
-            # self.angle += 1
+                pygame.draw.polygon(self.screen, self.colors[face_index], pointlist)
             
             pygame.display.flip()
+
+            iter += 1
+            iter %= 360
+            # print(iter)
 
 if __name__ == "__main__":
     Simulation().run()
