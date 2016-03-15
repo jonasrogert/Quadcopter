@@ -14,7 +14,7 @@ from quad.motor import calculate_dc_for_motor
 
 
 class Point3D:
-    def __init__(self, x = 0, y = 0, z = 0):
+    def __init__(self, x=0, y=0, z=0):
         self.x, self.y, self.z = float(x), float(y), float(z)
  
     def rotateX(self, angle):
@@ -51,16 +51,17 @@ class Point3D:
         y = -self.y * factor + win_height / 2
         return Point3D(x, y, self.z)
 
+
 class Simulation:
     def __init__(self, win_width = 640, win_height = 480):
         pygame.init()
 
         self.screen = pygame.display.set_mode((win_width, win_height))
-        pygame.display.set_caption("Simulation of a rotating 3D Cube (http://codeNtronix.com)")
+        pygame.display.set_caption("Drone")
         
         self.clock = pygame.time.Clock()
 
-        self.vertices = [
+        self.drone_vertices = [
             Point3D(-1,5,0),
             Point3D(1,5,0),
             Point3D(1,1,0),
@@ -73,20 +74,36 @@ class Simulation:
             Point3D(-5,-1,0),
             Point3D(-5,1,0),
             Point3D(-1,1,0),
-            Point3D(-20, -20, 5),
-            Point3D(-20, 20, 5),
-            Point3D(20, 20, 5),
-            Point3D(20, -20, 5),
         ]
+
+        # TODO fix Rotate the initial position of the drone
+        for k, v in enumerate(self.drone_vertices):
+            self.drone_vertices[k] = v.rotateZ(-45)
+
+        self.floor_vertices = [
+            Point3D(-5, -5, 3),
+            Point3D(-5, 5, 3),
+            Point3D(5, 5, 3),
+            Point3D(5, -5, 3),
+        ]
+
+        self.vertices = []
+        self.vertices.extend(self.drone_vertices)
+        self.vertices.extend(self.floor_vertices)
+
+        self.vertices_to_draw = []
 
         # Define the vertices that compose each of the 6 faces. These numbers are
         # indices to the vertices list defined above.
-        self.faces  = [(0,1,2,11),(2,3,4,5),(8,9,10,11),(5,6,7,8),(11,2,5,8),(12,13,14,15)]
+        self.drone_faces = [(0,1,2,11),(2,3,4,5),(8,9,10,11),(5,6,7,8),(11,2,5,8),]
+        self.floor_face = [(12,13,14,15)]
+        self.faces = []
+        self.faces.extend(self.drone_faces)
+        self.faces.extend(self.floor_face)
 
         # Define colors for each face
         self.colors = [(0, 0, 255), (0, 0, 255), (0, 0, 255), (0, 0, 255),
                        (0, 255, 255), (0, 100, 0)]
-
 
         # self.angle = 0
         self.angle_x = 0
@@ -112,16 +129,14 @@ class Simulation:
 
             rad_x = iter * math.pi / 180
             rad_y = rad_x + 180
-            scale_x = math.sin(rad_x)/5
+            scale_x = math.sin(rad_x)*20
             # print(scale_x)
-            scale_y = math.sin(rad_y)/5
+            scale_y = math.sin(rad_y)*20
             # print(scale_y)
-            deg_x = scale_x
-            deg_y = scale_y
+            self.angle_x = scale_x
+            self.angle_y = scale_y
 
             # self.angle += 1
-            self.angle_x = deg_x
-            self.angle_y = deg_y
             # self.angle_z += 1
 
             sensor_values = {
@@ -131,23 +146,25 @@ class Simulation:
             }
 
             for m in range(4):
-                dc[m] = calculate_dc_for_motor(m, 1, sensor_values)
-                self.colors[m] = (0, 0, 100*dc[m])
+                dc[m] = calculate_dc_for_motor(m, .5, sensor_values)
+                self.colors[m] = (0, 0, 255*dc[m])
             # print(dc)
 
             # It will hold transformed vertices.
             t = []
-            
-            for k, v in enumerate(self.vertices[:-4]):
+
+            self.vertices_to_draw = self.vertices[:]
+
+            for k, v in enumerate(self.vertices_to_draw[:-4]):
                 # Rotate the drone
                 # Rotate the point around X axis, then around Y axis, and finally around Z axis.
-                self.vertices[k] = v.rotateX(self.angle_x).rotateY(self.angle_y).rotateZ(self.angle_z)
+                self.vertices_to_draw[k] = v.rotateX(self.angle_x).rotateY(self.angle_y).rotateZ(self.angle_z)
                 # Transform the point from 3D to 2D
                 # v = r.project(self.screen.get_width(), self.screen.get_height(), 256, 12)
                 # Put the point in the list of transformed vertices
                 # t.append(p)
 
-            for v in self.vertices:
+            for v in self.vertices_to_draw:
                 # Projection
                 r = v.rotateX(self.projection_angle_x).rotateY(self.projection_angle_y).rotateZ(self.projection_angle_z)
                 # Transform the point from 3D to 2D

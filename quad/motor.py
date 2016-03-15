@@ -63,15 +63,15 @@ def calculate_dc_for_motor(motor, global_dc, sensor_values):
     if sensor_values['pitch'] > 0:
         # We should move the north down, and the south up
         if motor in (0,1):
-            adjustment += dc_stepping
-        else:
             adjustment -= dc_stepping
+        else:
+            adjustment += dc_stepping
     elif sensor_values['pitch'] < 0:
         # We should move the north down, and the south up
         if motor in (0,1):
-            adjustment -= dc_stepping
-        else:
             adjustment += dc_stepping
+        else:
+            adjustment -= dc_stepping
 
     # if roll < 0 => it leans to the left
     if sensor_values['roll'] > 0:
