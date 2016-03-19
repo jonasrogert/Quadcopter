@@ -52,9 +52,20 @@ class InputThread(threading.Thread):
 
 
 def read_sensor_values():
-    sensor_value = {k: value*180/math.pi for k, value in axis_dmp.sensor_value.items()}
-    return sensor_value
+    # sensor_value = {k: value*180/math.pi for k, value in axis_dmp.sensor_value.items()}
+    # return sensor_value
+    return axis_dmp.sensor_value.items()
 
+
+def calculate_adjustments(sensor_values):
+    adjustments = [
+        sensor_values['pitch']/2 - sensor_values['roll'] / 2,
+        sensor_values['pitch']/2 + sensor_values['roll'] / 2,
+        -sensor_values['pitch']/2 - sensor_values['roll'] / 2,
+        -sensor_values['pitch']/2 + sensor_values['roll'] / 2,
+    ]
+
+    return adjustments
 
 def calculate_dc_for_motor(motor, global_dc, sensor_values):
     adjustment = 0
@@ -150,21 +161,26 @@ def main_loop():
         while cycling:
             # read sensor values
             sensor_values = read_sensor_values()
+            motor_dc_values = map(lambda x : global_dc + x,calculate_adjustments(sensor_values))
+
+            # TODO make sure we're not setting unallowed values
+
             for motor_index, s in enumerate(servos):
                 # calculate each motors value independently
-                dc = calculate_dc_for_motor(motor_index, global_dc, sensor_values)
+                # dc = calculate_dc_for_motor(motor_index, global_dc, sensor_values)
 
                 if not simulation:
-                    s.ChangeDutyCycle(dc)
+                    s.ChangeDutyCycle(motor_dc_values[motor_index])
                 else:
+                    # Calculate the terminal positions
                     if motor_index in (0,1):
-                        y = 0
-                        x = motor_index * 30
+                        term_position_y = 0
+                        term_position_x = motor_index * 30
                     else:
-                        y = 10
-                        x = (motor_index - 2) * 30
-                    with term.location(x,y):
-                        print(dc)
+                        term_position_y = 10
+                        term_position_x = (motor_index - 2) * 30
+                    with term.location(term_position_x,term_position_y):
+                        print(motor_dc_values[motor_index])
 
             if simulation:
                 with term.location(0, 12):
