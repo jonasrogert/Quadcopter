@@ -163,7 +163,7 @@ def main_loop():
         while cycling:
             # read sensor values
             sensor_values = read_sensor_values()
-            motor_dc_values = list(map(lambda x : global_dc + 3*x, calculate_adjustments(sensor_values)))
+            motor_dc_values = list(map(lambda x : global_dc + 3*x if global_dc + 3*x > 0 else 0, calculate_adjustments(sensor_values)))
 
             # TODO make sure we're not setting unallowed values
 
