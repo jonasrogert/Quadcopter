@@ -17,7 +17,7 @@ except Exception as e:
 global cycling, global_dc, dc_stepping
 
 dc_adjustment_factor = 0.5
-global_dc = 0
+global_dc = 1
 dc_stepping = 0.25
 adjustment_stepping = 0.25
 simulation = True
@@ -165,7 +165,7 @@ def main_loop():
         while cycling:
             # read sensor values
             sensor_values = read_sensor_values()
-            motor_dc_values = list(map(lambda x : global_dc + dc_adjustment_factor*x if global_dc + 3*x > 0 else 0, calculate_adjustments(sensor_values)))
+            motor_dc_values = list(map(lambda x : global_dc + dc_adjustment_factor*x if global_dc + dc_adjustment_factor*x > 0 else 0, calculate_adjustments(sensor_values)))
 
             # TODO make sure we're not setting unallowed values
 
