@@ -143,6 +143,12 @@ def main_loop():
     axis_dmp.start_worker()
     time.sleep(5)
     print('Sensor thread started')
+    stabilize = True
+    while stabilize:
+        print(axis_dmp.sensor_value)
+        res = input()
+        if res == 'go':
+            stabilize = False
 
     if not simulation:
         for s in servos:
