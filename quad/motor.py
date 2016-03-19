@@ -17,8 +17,8 @@ except Exception as e:
 global cycling, global_dc, dc_stepping
 
 dc = 5
-dc_adjustment_factor = 2
-global_dc = 0
+dc_adjustment_factor = 1.5
+global_dc = 5
 dc_stepping = 0.25
 adjustment_stepping = 0.25
 simulation = True
@@ -48,6 +48,7 @@ class InputThread(threading.Thread):
                 global_dc -= dc_stepping
             if res == '9':
                 cycling = False
+            print(global_dc)
 
     def stop(self):
         self.running = False
@@ -146,7 +147,7 @@ def main_loop():
 
     if not simulation:
         for s in servos:
-            s.start(1)
+            s.start(global_dc)
             time.sleep(1)
             print('Starting motor')
 
