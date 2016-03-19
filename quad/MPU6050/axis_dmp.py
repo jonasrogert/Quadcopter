@@ -47,6 +47,8 @@ def sensor_worker():
             g = mpu.dmpGetGravity(q)
             sensor_value = mpu.dmpGetYawPitchRoll(q, g)
 
+            mpu.resetFIFO();
+
             # sensor_value = {k: value*180/math.pi for k, value in ypr.items()}
             # sensor_value = ypr
 
