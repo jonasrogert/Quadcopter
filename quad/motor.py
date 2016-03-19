@@ -22,6 +22,7 @@ dc_stepping = 0.25
 adjustment_stepping = 0.25
 simulation = True
 cycling = True
+sensor_corrections = {'roll': 0, 'yaw': 0, 'pitch': 0}
 
 if simulation:
     import blessed
@@ -60,8 +61,8 @@ def read_sensor_values():
 
 
 def calculate_adjustments(sensor_values):
-    p = sensor_values['pitch']
-    r = sensor_values['roll']
+    p = sensor_values['pitch'] - sensor_corrections['pitch']
+    r = sensor_values['roll'] - sensor_corrections['roll']
     adjustments = [
         p/2 + r/2,
         p/2 - r/2,
@@ -144,8 +145,9 @@ def main_loop():
     time.sleep(5)
     print('Sensor thread started')
     stabilize = True
+
     while stabilize:
-        print(axis_dmp.sensor_value)
+        sensor_corrections = axis_dmp.sensor_value
         res = input()
         if res == 'go':
             stabilize = False
