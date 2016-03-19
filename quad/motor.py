@@ -20,6 +20,7 @@ dc = 5
 dc_adjustment_factor = 2
 global_dc = 0
 dc_stepping = 0.25
+adjustment_stepping = 0.25
 simulation = True
 cycling = True
 
@@ -91,15 +92,15 @@ def calculate_dc_for_motor(motor, global_dc, sensor_values):
     if sensor_values['roll'] > 0:
         # We should move the west down, and the east up
         if motor in (0,2):
-            adjustment += dc_stepping
+            adjustment += adjustment_stepping
         else:
-            adjustment -= dc_stepping
+            adjustment -= adjustment_stepping
     elif sensor_values['roll'] < 0:
         # We should move the west down, and the east up
         if motor in (0,2):
-            adjustment -= dc_stepping
+            adjustment -= adjustment_stepping
         else:
-            adjustment += dc_stepping
+            adjustment += adjustment_stepping
 
     new_dc = global_dc + adjustment
 
@@ -121,10 +122,10 @@ def main_loop():
         GPIO.setup(26, GPIO.OUT)
 
         servos = [
-            GPIO.PWM(40, 50),
-            GPIO.PWM(36, 50),
-            GPIO.PWM(32, 50),
-            GPIO.PWM(26, 50)
+            GPIO.PWM(40, 300),
+            GPIO.PWM(36, 300),
+            GPIO.PWM(32, 300),
+            GPIO.PWM(26, 300)
         ]
     else:
         servos = list(range(4))
