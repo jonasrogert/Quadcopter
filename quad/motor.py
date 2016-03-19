@@ -58,11 +58,13 @@ def read_sensor_values():
 
 
 def calculate_adjustments(sensor_values):
+    p = sensor_values['pitch']
+    r = sensor_values['roll']
     adjustments = [
-        sensor_values['pitch']/2 - sensor_values['roll'] / 2,
-        sensor_values['pitch']/2 + sensor_values['roll'] / 2,
-        -sensor_values['pitch']/2 - sensor_values['roll'] / 2,
-        -sensor_values['pitch']/2 + sensor_values['roll'] / 2,
+        p/2 - r/2,
+        p/2 + r/2,
+        -p/2 - r/2,
+        -p/2 + r/2,
     ]
 
     return adjustments
@@ -161,7 +163,7 @@ def main_loop():
         while cycling:
             # read sensor values
             sensor_values = read_sensor_values()
-            motor_dc_values = map(lambda x : global_dc + x,calculate_adjustments(sensor_values))
+            motor_dc_values = map(lambda x : global_dc + x, calculate_adjustments(sensor_values))
 
             # TODO make sure we're not setting unallowed values
 
