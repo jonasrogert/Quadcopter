@@ -54,17 +54,17 @@ class InputThread(threading.Thread):
 def read_sensor_values():
     # sensor_value = {k: value*180/math.pi for k, value in axis_dmp.sensor_value.items()}
     # return sensor_value
-    return axis_dmp.sensor_value.items()
+    return axis_dmp.sensor_value
 
 
 def calculate_adjustments(sensor_values):
     p = sensor_values['pitch']
     r = sensor_values['roll']
     adjustments = [
-        p/2 - r/2,
         p/2 + r/2,
-        -p/2 - r/2,
+        p/2 - r/2,
         -p/2 + r/2,
+        -p/2 - r/2,
     ]
 
     return adjustments
@@ -86,7 +86,7 @@ def calculate_dc_for_motor(motor, global_dc, sensor_values):
         else:
             adjustment -= dc_stepping
 
-    # if roll < 0 => it leans to the left
+    # if roll < 0 => it leans to the left # TODO WRONG
     if sensor_values['roll'] > 0:
         # We should move the west down, and the east up
         if motor in (0,2):
@@ -163,7 +163,7 @@ def main_loop():
         while cycling:
             # read sensor values
             sensor_values = read_sensor_values()
-            motor_dc_values = map(lambda x : global_dc + x, calculate_adjustments(sensor_values))
+            motor_dc_values = list(map(lambda x : global_dc + 3*x, calculate_adjustments(sensor_values)))
 
             # TODO make sure we're not setting unallowed values
 
