@@ -16,7 +16,7 @@ except Exception as e:
 
 global cycling, global_dc, dc_stepping
 
-dc_adjustment_factor = 0.5
+dc_adjustment_factor = 0.25
 global_dc = 1
 dc_stepping = 0.25
 adjustment_stepping = 0.25
