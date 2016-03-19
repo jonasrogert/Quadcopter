@@ -148,6 +148,7 @@ def main_loop():
 
     while stabilize:
         sensor_corrections = axis_dmp.sensor_value
+        print(sensor_corrections)
         res = input()
         if res == 'go':
             stabilize = False
